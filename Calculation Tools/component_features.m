@@ -1,0 +1,46 @@
+%% FPS features
+V_out = 5; %V
+Vline_min = 60; %Vac
+Vline_max = 265; %Vac
+fl = 50; %Hertz
+Dch = 0.2;
+Pout = 1; %W
+Pin = 1.25*Pout; % W
+I_out = Pout/V_out; %A
+Cdc = Pin*3e-6; %uF
+Vdc_min = sqrt(2*Vline_min^2-(Pin*(1-Dch))/(Cdc*fl)); % V
+Vdc_max = 374.76; % V
+Dmax = 0.45;
+V_ro = Dmax*Vdc_min/(1-Dmax); %V
+Vds_nom = V_ro + Vdc_max; %V
+fs = 65000; %Hertz
+Krf = 0.5;
+Lm = (Vdc_min*Dmax)^2/(2*Pin*Krf*fs); %H
+I_EDC = Pin/(Vdc_min*Dmax); %A
+Delta_I = Vdc_min*Dmax/(Lm*fs); %A
+Ids_peak = I_EDC + Delta_I/2; %A
+Ids_rms = sqrt((3*I_EDC^2 + (Delta_I/2)^2)*Dmax/3);
+%% Transformer features
+B_sat = 0.3; %T
+I_over = Ids_peak*1.12; %A
+Ae = 14.4; %mm^2
+V_f = 0.7; %V
+A_l = 1200; %nH/turns^2
+Co = 1000*10^-6; %F
+ESR = 0.238; %ohm
+Np_min = Lm*I_over*10^6/(B_sat*Ae); %turns
+Np = round(Np_min+8);
+n = V_ro/(V_out+V_f); % turns ratio
+Ns = round(Np/n);
+G = 40*pi*Ae*(Np^2/(Lm*10^9)-1/A_l); %mm
+Id_rms = Ids_rms*V_ro/(V_out+V_f)*sqrt((1-Dmax)/(Dmax)); %A
+V_d = V_out + (Vdc_max*(V_out+V_f))/V_ro;
+I_cap = sqrt(Id_rms^2-I_out^2);
+Delta_V = I_out*Dmax/(Co*fs)+Ids_peak*V_ro*ESR/(V_out+V_f);
+L_leakage = 0.03*Lm;
+V_sn = V_ro*2.5;
+P_sn = 0.5*fs*L_leakage*Ids_peak^2*V_sn/(V_sn-V_ro);
+R_sn = V_sn^2/P_sn;
+C_sn = 10/(R_sn*fs);
+Delta_Vsn = V_sn/(C_sn*R_sn*fs);
+
