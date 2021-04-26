@@ -7,7 +7,7 @@ Pout=100; % W
 Vout=12; % V
 V_F=1; % V Secondary Side diode on voltage
 fsw_min=55000; % Hz
-fsw_max=99000; % Hz
+fsw_max=100000; % Hz
 %% Setting a flyback voltage
 VO=Vout+V_F; % V Voltage at secondary side
 Nptos=26/6; % Select turn ratio primary/secondary
@@ -42,13 +42,13 @@ Vcc=12; % V
 V_F_Vcc= 1; % V
 Nd= Ns*(Vcc+V_F_Vcc)/(Vout+V_F); % VCC winding turns
 %% Calculating Winding Factor
-A=25.3e-6; %m
-D=6.5e-6; %m
-F=12.35e-6; %m
+A=25.3e-3; %m
+D=6.5e-3; %m
+F=12.35e-3; %m
 Window_A=(A-D)/2*F; %m^2
-AWG10= 5.26e-12; %m^2
-AWG20= 0.518e-12; %m^2
-AWG30= 5.09e-14; %m^2
+AWG10= 5.26e-6; %m^2
+AWG20= 0.518e-6; %m^2
+AWG30= 0.509e-6; %m^2
 Cable_A=AWG20*Np+AWG10*Ns +AWG30*Nd; %m^2
 Fill_Factor=Cable_A/Window_A; 
 
