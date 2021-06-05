@@ -25,7 +25,7 @@ P_G_M=Q_g_M*Vgs_M.*fsw;
 % P_body_M=0.5*Vsw*Irr_M*trr_M*fsw;
 
 % Output Diode
-Vf=0.85; %V
+Vf=0.75; %V
 P_on_D=Vf*Iout;
 
 %Shunt Resistor
@@ -62,9 +62,9 @@ hold on
 plot(Vin,P_Diode,'LineWidth',2)
 hold on
 plot(Vin,P_transformer,'LineWidth',2)
-legend('Total','MOSFET','Diode','Transformer') 
+legend('Total','MOSFET','Diodes','Transformer') 
 xlabel('Input Voltage (V)')
 ylabel('Power Loss (W)')
 title(' Power Loss vs Vin')
-ylim([0 9.1])
+ylim([0 9])
 grid on
