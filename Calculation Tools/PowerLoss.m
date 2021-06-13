@@ -9,20 +9,20 @@ Pin=Pout/0.8; % %80 efficiency is assumed
 Iin=Pin./Vin;
 Iout=Pout/Vout;
 Vsw=Vin+4.33*Vout; % V % 4.33 is turn ratio
+
 % MOSFET
 R_on= 0.5 ; % ohm
 trisefall_M=19e-9; % s
 E_coss=2.2e-6; % Joule
 Vgs_M=3.5; % V
 Q_g_M=18.7e-9; % C
-% Irr_M=12/3/2; % A
-% trr_M=180e-9/5; % s
+
 
 P_on_M= Iin.^2*R_on;
 P_sw_M=0.5*Vsw.*Iin*trisefall_M.*fsw;
 P_coss_M=E_coss.*fsw;
 P_G_M=Q_g_M*Vgs_M.*fsw;
-% P_body_M=0.5*Vsw*Irr_M*trr_M*fsw;
+
 
 % Output Diode
 Vf=0.75; %V
@@ -48,12 +48,15 @@ RAC20=0.0346; % ohm
 RAC30=0.0731; % ohm
 P_copper=Iout^2*RAC10+Ishunt.^2*RAC20+Id^2;
 
+%RCD Snubber
+Isnubber=linspace(0.02347,0.02345,181);
+Psnubber=Isnubber.^2.*5600+Isnubber*0.6;
 
 
 %% Plotting
 P_MOSFET=P_on_M+P_sw_M+P_coss_M.*ones(1,181)+P_G_M.*ones(1,181);
 P_Diode=P_on_D*ones(1,181);
-P_total=P_on_M+P_sw_M+P_coss_M.*ones(1,181)+P_G_M.*ones(1,181)+P_on_D.*ones(1,181)+P_core.*ones(1,181)+Pshunt+P_copper;
+P_total=P_on_M+P_sw_M+P_coss_M.*ones(1,181)+P_G_M.*ones(1,181)+P_on_D.*ones(1,181)+P_core.*ones(1,181)+Pshunt+P_copper+Psnubber;
 P_transformer=P_copper + P_core;
 plot(Vin,P_total,'LineWidth',2)
 hold on
@@ -62,9 +65,12 @@ hold on
 plot(Vin,P_Diode,'LineWidth',2)
 hold on
 plot(Vin,P_transformer,'LineWidth',2)
-legend('Total','MOSFET','Diodes','Transformer') 
+hold on
+plot(Vin,Psnubber,'LineWidth',2)
+
+legend('Total','MOSFET','Diodes','Transformer','RCD Snubbber') 
 xlabel('Input Voltage (V)')
 ylabel('Power Loss (W)')
 title(' Power Loss vs Vin')
-ylim([0 9])
+ylim([0 12])
 grid on
