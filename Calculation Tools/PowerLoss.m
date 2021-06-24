@@ -49,7 +49,7 @@ RAC30=0.0731; % ohm
 P_copper=Iout^2*RAC10+Ishunt.^2*RAC20+Id^2;
 
 %RCD Snubber
-Isnubber=linspace(0.02347,0.02345,181);
+Isnubber=linspace(0.01299,0.01280,181);
 Psnubber=Isnubber.^2.*5600+Isnubber*0.6;
 
 
@@ -72,5 +72,16 @@ legend('Total','MOSFET','Diodes','Transformer','RCD Snubbber')
 xlabel('Input Voltage (V)')
 ylabel('Power Loss (W)')
 title(' Power Loss vs Vin')
-ylim([0 12])
+ylim([0 9.5])
 grid on
+
+figure
+eff=(100./(P_total+100)).*100;
+plot(Vin,eff,'LineWidth',2)
+
+xlabel('Input Voltage (V)')
+ylabel('%')
+title(' Efficiency vs Vin')
+grid on
+ylim([91.6 92])
+
